@@ -1,1 +1,1 @@
-A lib for convert proto file to typescript declaration
+# A lib for convert proto file to typescript declaration
