@@ -1,0 +1,15 @@
+{
+  "name": "proto-parser",
+  "version": "1.0.0",
+  "description": "a tool for convert proto file to typescript declaration",
+  "main": "dist/main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
+  },
+  "author": "lei.li",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
