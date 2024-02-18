@@ -1,3 +1,3 @@
-export function isSpace(input: string) {
-  return /\s/.test(input) || /\n/.test(input);
+export function getWhitespace(count: number) {
+  return new Array(count).fill(' ').join('');
 }

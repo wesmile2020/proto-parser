@@ -1,4 +1,3 @@
-import { isSpace } from '../utils';
 import { TokenKind } from './token_kind';
 
 class Token {
@@ -11,7 +10,7 @@ class Token {
   }
 }
 
-function parseKeyword(input: string) {
+function scanKeyword(input: string) {
   const keywords = [
    new Token(TokenKind.syntax, 'syntax'),
    new Token(TokenKind.package, 'package'),
@@ -41,7 +40,7 @@ function parseKeyword(input: string) {
   return null;
 }
 
-function parseSymbol(input: string) {
+function scanSymbol(input: string) {
   const symbols = [
     new Token(TokenKind.add, '+'),
     new Token(TokenKind.subtract, '-'),
@@ -70,7 +69,7 @@ function parseSymbol(input: string) {
   return null;
 }
 
-function parseComment(input: string) {
+function scanComment(input: string) {
   const comments = [
     new Token(TokenKind.singleComment, '//'),
     new Token(TokenKind.multipleCommentStart, '/*'),
@@ -100,7 +99,7 @@ function isDeclareKeyword(token: Token) {
 
 const unknownToken = new Token(TokenKind.unknown, 0);
 
-export function parse(input: string) {
+export function scan(input: string) {
   const result: Token[] = [];
   let lastToken = unknownToken
 
@@ -108,7 +107,7 @@ export function parse(input: string) {
   let current = '';
   while (i < input.length) {
     if (i < input.length - 1) {
-      const comment = parseComment(input[i] + input[i + 1]);
+      const comment = scanComment(input[i] + input[i + 1]);
       if (comment) {
         if (comment.kind === TokenKind.multipleCommentEnd && lastToken.kind === TokenKind.multipleCommentStart) {
           const token = new Token(TokenKind.literal, current);
@@ -146,14 +145,14 @@ export function parse(input: string) {
       continue;
     }
 
-    if (isSpace(input[i])) {
+    if (/\s/.test(input[i])) {
       if (current) {
         if (isDeclareKeyword(lastToken)) {
           const token = new Token(TokenKind.identifier, current);
           result.push(token);
           lastToken = token;
         } else {
-          const keyword = parseKeyword(current);
+          const keyword = scanKeyword(current);
           if (keyword) {
             result.push(keyword);
             lastToken = keyword;
@@ -167,7 +166,7 @@ export function parse(input: string) {
       continue;
     }
 
-    const symbol = parseSymbol(input[i]);
+    const symbol = scanSymbol(input[i]);
     if (symbol) {
       if (current) {
         if (isDeclareKeyword(lastToken)) {
